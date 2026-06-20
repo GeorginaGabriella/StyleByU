@@ -1,22 +1,20 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace Database\Seeders;
 
-return new class extends Migration
+use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+class AdminSeeder extends Seeder
 {
-    public function up(): void
+    public function run(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->after('id');
-        });
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@stylebyu.com',
+            'password' => Hash::make('12345678'),
+            'role' => 'admin'
+        ]);
     }
-
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
-        });
-    }
-};
+}

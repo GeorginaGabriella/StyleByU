@@ -1,22 +1,21 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Middleware;
 
-return new class extends Migration
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class IsAdmin
 {
-    public function up(): void
+    public function handle(Request $request, Closure $next): Response
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->after('id');
-        });
+        if(auth()->check() && auth()->user()->isAdmin())
+        {
+            return $next($request);
+        }
+        return redirect()
+            ->route('dashboard')
+            ->with('error','Akses Ditolak');
     }
-
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
-        });
-    }
-};
+}

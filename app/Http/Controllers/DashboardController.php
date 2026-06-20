@@ -1,22 +1,15 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Http\Controllers;
 
-return new class extends Migration
+class DashboardController extends Controller
 {
-    public function up(): void
+    public function index()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->after('id');
-        });
+        if(auth()->user()->isAdmin())
+        {
+            return view('dashboard.admin');
+        }
+        return view('dashboard.user');
     }
-
-    public function down(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role');
-        });
-    }
-};
+}
