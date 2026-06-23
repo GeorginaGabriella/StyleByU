@@ -63,11 +63,11 @@ class OrderController extends Controller
                 'price' => $item->price
             ]);
 
+            Product::where('id', $item->product_id)
+                ->decrement('stock', $item->quantity);
+
             if ($item->product_variant_id) {
                 ProductVariant::where('id', $item->product_variant_id)
-                    ->decrement('stock', $item->quantity);
-            } else {
-                Product::where('id', $item->product_id)
                     ->decrement('stock', $item->quantity);
             }
         }
